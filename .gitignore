@@ -1,5 +1,5 @@
 db.sqlite3
 geckodriver.log 
-virtualenv/
-superlists/__pycache__/ 
-lists/__pycache__/
+virtualenv/ 
+**/__pycache__/
+*.pyc
