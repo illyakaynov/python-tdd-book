@@ -10,7 +10,7 @@ class SmokeTest(TestCase):
     
     def test_only_saves_items_when_neccessary(self):
         self.client.get('/')
-        self.assertEqual(Item.objects.count(),0)
+        self.assertEqual(Item.objects.count(), 0)
 
 
     def test_saving_and_retrieving_items(self):
@@ -23,22 +23,16 @@ class SmokeTest(TestCase):
         second_item.save()
 
         saved_items = Item.objects.all()
-        self.assertEqual(saved_items.count(),2)
+        self.assertEqual(saved_items.count(), 2)
 
         first_saved_item = saved_items[0]
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, 'The first (ever) list item')
         self.assertEqual(second_saved_item.text, 'Item the second')
 
-
     def test_home_page_returns_correct_html(self):
         response = self.client.get('/')
-
-        html = response.content.decode('utf8')
-
         self.assertTemplateUsed(response, 'home.html')
-    
-
 
     def test_uses_list_template(self):
         response = self.client.get('/lists/the-only-list-in-the-world/')
