@@ -9,7 +9,6 @@ MAX_WAIT = 10
 
 class NewVisitorTest(StaticLiveServerTestCase):
 
-
     def test_can_start_a_list_for_one_user(self):
         # Edith has heard about a cool new online to-do app. She goes
         # to check out its homepage
@@ -44,7 +43,6 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # The page updates again, and now shows both items on her list
         self.wait_for_row_in_list_table('1: Buy peacock feathers')
         self.wait_for_row_in_list_table('2: Use peacock feathers to make a fly')
-
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         self.browser.get(self.live_server_url)
