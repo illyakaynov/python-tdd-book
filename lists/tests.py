@@ -67,6 +67,8 @@ class NewListTest(TestCase):
         self.assertRedirects(response, f'/lists/{new_list.id}/')
 
 
+
+
 class ListViewTest(TestCase):
 
     def test_displays_all_items(self):
