@@ -1,0 +1,15 @@
+[Unit]
+Description=Gunicorn server for illyakaynov.com
+
+[Service]
+Restart=on-failure
+User=pi
+WorkingDirectory=/home/pi/sites/illyakaynov.com
+EnvironmentFile=/home/pi/sites/illyakaynov.com.env
+
+ExecStart=/home/pi/sites/illyakaynov.com/virtualenv/bin/gunicorn \
+    --bind unix:/tmp/DOMAIN.socket \
+    superlists.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
