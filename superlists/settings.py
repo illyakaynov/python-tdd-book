@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #DEBUG = True
 #ALLOWED_HOSTS = [".illyakaynov.com", "localhost","127.0.0.1" ]
 
-if 'DJANGO_DEBUG_FALSE' in os.envron:
+if 'DJANGO_DEBUG_FALSE' in os.environ:
     DEBUG = False
     SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
     ALLOWED_HOSTS = [os.environ['SITENAME']]
