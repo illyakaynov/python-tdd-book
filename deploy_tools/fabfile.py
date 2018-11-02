@@ -4,7 +4,22 @@ from fabric.api import cd, env, local, run
 
 REPO_URL = 'https://github.com/illyakaynov/python-tdd-book'
 
-def _create_or_update():
+
+def _get_latest_source():
+    if exists('.git'):
+        run('git fetch')
+    else:
+        run(f'git clone {REPO_URL}')
+    current_commit = local('git log -n 1 --format=%H', capture=True)
+    run(f'git reset --hard {current_commit}')
+
+def _update_virtualenv():
+    if not exists('virtualenv/bin/pip'):
+        run(f'python3.6 -m venv virtualenv')
+    run('./virtualenv/bin/pip install -r requirements.txt')
+
+
+def _create_or_update_dotenv():
     append('.env', 'DJANGO_DEBUG_FALSE=y')
     append('.env', f'SITENAME={env.host}')
     current_contents = run('cat .env')
@@ -14,9 +29,18 @@ def _create_or_update():
         ))
     append('.env', f'DJANGO_SECRET_KEY={new_secret}')
 
-def _udpate_static_files():
+def _update_static_files():
     run('./virtualenv/bin/python manage.py collectstatic --noinput')
 
-def _update_datavase():
+def _update_database():
     run('./virtualenv/bin/python manage.py migrate --noinput')
 
+def deploy():
+    site_folder = f'/home/{env.user}/sites/{env.host}'
+    run(f'mkdir -p {site_folder}')
+    with cd(site_folder):
+        _get_latest_source()
+        _update_virtualenv()
+        _create_or_update_dotenv()
+        _update_static_files()
+        _update_database()
