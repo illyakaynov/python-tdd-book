@@ -1,11 +1,11 @@
-from django.test import TestCase
 from django.urls import resolve
 from lists.views import home_page
 from lists.models import Item
 from lists.models import List
 
 from django.http import HttpRequest
-
+from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 class ListAndItemModelsTest(TestCase):
 
@@ -48,3 +48,10 @@ class ListAndItemModelsTest(TestCase):
     def test_home_page_returns_correct_html(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
+
+    def test_cannot_save_empty_list_items(self):
+        list_ = List.objects.create()
+        item = Item(list=list_, text='')
+        with self.assertRaises(ValidationError):
+            item.save()
+            item.full_clean()
