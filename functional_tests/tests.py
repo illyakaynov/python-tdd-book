@@ -1,7 +1,10 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from unittest import skip
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
+
 import time
 import os
 
@@ -9,17 +12,6 @@ MAX_WAIT = 10
 
 
 class NewVisitorTest(StaticLiveServerTestCase):
-
-
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        # staging_server = os.environ.get('STAGING_SERVER)')
-
-        # if staging_server:
-        self.live_server_url = 'http://illyakaynov.com'# + staging_server
-
-    def tearDown(self):
-        self.browser.quit()
 
     def test_can_start_a_list_for_one_user(self):
         # Edith has heard about a cool new online to-do app. She goes
@@ -100,6 +92,20 @@ class NewVisitorTest(StaticLiveServerTestCase):
         #Satisfied they both go back to sleep
 
 
+
+
+class FunctionalTest(StaticLiveServerTestCase):
+
+    def setUp(self):
+        self.browser = webdriver.Firefox()
+        # staging_server = os.environ.get('STAGING_SERVER)')
+
+        # if staging_server:
+        self.live_server_url = 'http://illyakaynov.com'  # + staging_server
+
+    def tearDown(self):
+        self.browser.quit()
+
     def wait_for_row_in_list_table(self, row_text):
         start_time = time.time()
         while True:
@@ -113,6 +119,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
                     raise e
                 time.sleep(0.5)
 
+
+class LayoutAndStyleTesting(FunctionalTest):
     def test_layout_and_styling(self):
         # Edith goes to the homepage
         self.browser.get(self.live_server_url)
@@ -137,3 +145,16 @@ class NewVisitorTest(StaticLiveServerTestCase):
             512,
             delta=10
         )
+
+class ItemValidationTest(FunctionalTest):
+    @skip
+    def test_cannot_add_empty_list_items(self):
+        # Edith goes to the home page and accidentally tries to submit
+        # an empty list item. She hits Enter on the empty input box
+        # The home page refreshes, and there is an error message saying
+        # tha list items cannot be blank
+        # She tries again with some text for the item, which now works
+        # Perversely, she now decides to submit a second blank list item
+        # SHe receives a similar warning on the list page
+        # And she can correct it by filling some text in
+        self.fail('write the test')
